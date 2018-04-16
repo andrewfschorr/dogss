@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express')
 const app = express()
-
 const db = require('./db-connection');
 
 app.use(function(req, res, next) {
