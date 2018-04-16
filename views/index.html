@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>W00f</title>
+</head>
+<body>
+<p>search fom some dogs</p>
+<input type="text" placeholder="woof" class="search-dogs">
+<ul class="results"></li>
+<script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', init);
+
+let resultsEl;
+
+function init() {
+    const dogsSearchEl = document.querySelector('.search-dogs');
+    resultsEl = document.querySelector('.results');
+    dogsSearchEl.addEventListener('keyup', debounce(searchDogs, 500));
+}
+
+function searchDogs(e) {
+    fetch(`/dogs?q=${e.target.value}`).then((resp) => {
+        return resp.json();
+    }).then((data) => {
+        renderDogs(data);
+    }).catch((err) => {
+        console.log(err);
+    })
+}
+
+function renderDogs(dogs) {
+    resultsEl.innerHTML = '';
+    const f = document.createDocumentFragment();
+    dogs.forEach(specificDog => {
+        const dog = document.createElement('li');
+        dog.textContent = specificDog.breed;
+        f.appendChild(dog);
+    });
+    resultsEl.appendChild(f);
+}
+
+function debounce(fn, delay) {
+    let timeout;
+    return function(e) {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            fn.call(this, e);
+        }, delay);
+    }
+}
+
+</script>
+</body>
+</html>

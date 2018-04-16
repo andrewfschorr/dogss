@@ -1,0 +1,21 @@
+{
+  "name": "dogss",
+  "version": "1.0.0",
+  "description": "woof",
+  "main": "app.js",
+  "repository": "https://github.com/andrewfschorr/dogss",
+  "author": "\"Andrew F Schorr <afs35mm@gmail.com> (http://andrewfschorr.com)",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "mysql": "^2.15.0"
+  },
+  "engines": {
+    "node": "6.11.0"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
