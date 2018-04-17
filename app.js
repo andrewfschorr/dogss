@@ -15,7 +15,13 @@ app.set('view engine', 'html');
 app.get('/', (req, res) => res.render('index'))
 
 app.get('/dogs', function (req, res, next) {
-    db.query(`SELECT * FROM dogs WHERE breed like "%${req.query.q}%"`, function (error, resp, fields) {
+    const query = req.query.q;
+    if (query === 'error') {
+        res.status(500).send('Something broke!');
+        return;
+    }
+
+    db.query(`SELECT * FROM dogs WHERE breed like "%${query}%"`, function (error, resp, fields) {
         if (error) throw error;
         res.status(200).json(resp);
     });
