@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+const widgets = <%- JSON.stringify(widgets) %>;
+</script>
+<meta charset="UTF-8">
+<title>w1dg4t</title>
+</head>
+<body>
+<div class="widget">
+    <label for="text-input">enter in a name for this widget</label>
+    <br>
+    <input type="text" id="text-input" class="text-input">
+    <button class="submit-widget">Submit</button>
+    <div class="widget-table"></div>
+</div>
+<script type="text/javascript">
+// class WidgetModel {
+//     constructor({name, ID}) {
+//         console.log(name, ID);
+//         this.name = name;
+//         this.ID = ID;
+//     }
+// }
+
+// function init() {
+//     document.querySelector('.submit-widget').addEventListener('click', submitWidget);
+//     renderWidgets(widgets);
+// }
+
+// function renderWidgets(widgets) {
+//     widgets = widgets.map((widget) => {
+//         return new WidgetModel(widget);
+//     });
+// }
+
+// function submitWidget(e) {
+//     const inputEl = document.querySelector('.text-input');
+//     fetch('/widget', {
+//         method: 'POST',
+//         body: JSON.stringify({
+//             name: document.querySelector('.text-input').value,
+//         }),
+//         headers: {
+//             'Accept': 'application/json',
+//             'Content-Type': 'application/json'
+//         },
+//     })
+// }
+// class WidgetTable {
+//     constructor({el, data, submitter}) {
+//         this.el = el;
+//         this.data = data;
+//         this.submitter = submitter;
+//         this.renderWidgets(this.data);
+//     }
+
+//     renderWidgets(data) {
+//         const widgetModels = this.data.map((widget) => new Widget(widget));
+//         const ul = document.createElement('ul')
+//         widgetModels.forEach((widget) => {
+//             const li = document.createElement('li');
+//             li.textContent = widget.name;
+//             const btn = document.createElement('button');
+//             btn.textContent = 'delete';
+//             li.appendChild(btn)
+//             ul.appendChild(li);
+//         })
+
+//         const f = document.createDocumentFragment();
+//         f.appendChild(ul);
+//         this.el.innerHTML = '';
+//         this.el.appendChild(f);
+//     }
+// }
+
+class WidgetModel {
+    constructor({name, ID}) {
+        this.name = name;
+        this.id = ID;
+    }
+
+    delete(cb) {
+        fetch('/widget', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                id: this.id,
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }).then((resp) => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                throw new Error('fuck');
+            }
+        }).then((data) => {
+            console.log(this);
+            cb(data);
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
+
+    create(cb) {
+        fetch('http://dogss.herokuapp.com/widget', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: this.name,
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }).then((resp) => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                throw new Error('fuck');
+            }
+        }).then((data) => {
+            console.log(this);
+            cb(data);
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
+}
+
+
+class Widget {
+    constructor({el, data}) {
+        console.l
+        const btn = el.querySelector('.submit-widget')
+        this.textEl = el.querySelector('.text-input');
+        btn.addEventListener('click', this.submitWidget.bind(this));
+        this.data = data;
+        this.widgetList = el.querySelector('.widget-table');
+        this.renderWidgets(this.data);
+    }
+
+    renderWidgets(data) {
+        const widgetModels = data.map((widget) => new WidgetModel(widget));
+        const f = document.createDocumentFragment();
+        const ul = document.createElement('ul');
+        widgetModels.forEach((model) => {
+            const li = document.createElement('li');
+            li.textContent = model.name;
+            const btn = document.createElement('button');
+            btn.textContent = 'delete';
+            li.appendChild(btn);
+            btn.addEventListener('click', this.deleteWidget.bind(this, model));
+            ul.appendChild(li);
+        })
+        f.appendChild(ul);
+        this.widgetList.innerHTML = '';
+        this.widgetList.appendChild(f);
+    }
+
+    deleteWidget(model) {
+        model.delete(this.renderWidgets.bind(this));
+    }
+
+    submitWidget(e) {
+        // console.log(this.textEl.value);
+        const newWidget = new WidgetModel({
+            name: this.textEl.value,
+        });
+        newWidget.create(this.renderWidgets.bind(this));
+    }
+
+    // reRenderWidgets(data) {
+    //     console.log(data);
+    // }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new Widget({
+        el: document.querySelector('.widget'),
+        data: widgets,
+    });
+});
+</script>
+</body>
+</html>
