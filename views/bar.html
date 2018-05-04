@@ -1,0 +1,90 @@
+<html>
+<head>
+</head>
+<body>
+</body>
+<script type="text/javascript">
+
+// let p;
+
+// function getSuggestions(rawText) {
+//     p = p || fetch('https://dogss.herokuapp.com/dogs?q=')
+//         .then(resp => resp.text())
+//         .then(JSON.parse);
+
+//     // return p.then(() => {
+//     //     return 'hi';
+//     // });
+//     console.log(p);
+//     return p.then((json) => {
+//         return json.filter((item) => {
+//             return item.breed.toLowerCase().includes(rawText)
+//         })
+//     })
+// }
+// getSuggestions('husky').then(console.log);
+
+// function logFetch(url) {
+//     return fetch(url)
+//     .then(response => response.text())
+//     .then(text => {
+//         console.log(text);
+//     }).catch(err => {
+//         console.error('fetch failed', err);
+//     });
+// }
+// wait ms milliseconds
+
+// Start off with a promise that always resolves
+// let sequence = Promise.resolve();
+
+//   return story.chapterUrls.reduce(function(sequence, chapterUrl) {
+//     // Once the last chapter's promise is done…
+//     return sequence.then(function() {
+//       // …fetch the next chapter
+//       return getJSON(chapterUrl);
+//     }).then(function(chapter) {
+//       // and add it to the page
+//       addHtmlToPage(chapter.html);
+//     });
+//   }, Promise.resolve());
+
+
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(1);
+    },  Math.random() * 10);
+});
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(2);
+    },  Math.random() * 10);
+});
+const p3 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(3);
+    },  Math.random() * 10);
+});
+
+// [p1, p2, p3].reduce((acc, cur) => {
+//     return acc.then(() => {
+//         return cur.then((num) => {
+//             console.log(num)
+//         });
+//     })
+// }, Promise.resolve());
+// Promise.all([p1, p2, p3]).then((n) => {
+//     console.log(n);
+// })
+
+[p1, p2, p3].reduce((acc, cur) => {
+    return acc.then(() => {
+        return cur;
+    }).then((n) => {
+        console.log(n);
+        return n;
+    })
+}, Promise.resolve());
+
+</script>
+</html>

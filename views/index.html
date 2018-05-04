@@ -20,22 +20,33 @@ function init() {
     dogsSearchEl.addEventListener('keyup', debounce(searchDogs, 500));
 }
 
+let p;
+let dogKeys = {};
+
 function searchDogs(e) {
-    fetch(`/dogs?q=${e.target.value}`).then((resp) => {
-        return resp.json();
+    p = p || fetch(`/dogs?q=`).then((resp) => {
+        const json = resp.json();
+        return json;
     }).then((data) => {
-        renderDogs(data);
-    }).catch((err) => {
-        // console.log(err);
-        console.log('whoop!');
+        return data.reduce((acc, cur) => {
+            acc[cur.breed] = cur;
+            return acc;
+        }, {})
     })
+
+    p.then((data) => {
+        console.log(data);
+        // renderDogs(data.filter((dog) => {
+        //     return dog.breed.toLowerCase().includes(e.target.value);
+        // }));
+    });
 
 }
 
-function renderDogs(dogs) {
+function renderDogs(dogs, text) {
     resultsEl.innerHTML = '';
     const f = document.createDocumentFragment();
-    dogs.forEach(specificDog => {
+    dogs.filter(specificDog => {
         const dog = document.createElement('li');
         dog.textContent = specificDog.breed;
         f.appendChild(dog);

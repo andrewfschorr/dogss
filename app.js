@@ -5,7 +5,7 @@ const db = require('./db-connection');
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 app.use(require("body-parser").json());
-
+app.use(express.static('public'))
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -68,5 +68,15 @@ app.delete('/widget', function (req, res, next) {
         }
     });
 });
+
+app.get('/bar', function (req, res, next) {
+    res.render('bar');
+});
+
+
+app.get('/foo', function (req, res, next) {
+    res.render('foo');
+});
+
 
 app.listen(process.env.PORT || 3000, () => console.log('Example app listening on port 3000!'))

@@ -148,7 +148,7 @@ class Widget {
         const ul = document.createElement('ul');
         widgetModels.forEach((model) => {
             const li = document.createElement('li');
-            li.textContent = model.name;
+            li.innerHTML = model.name;
             const btn = document.createElement('button');
             btn.textContent = 'delete';
             li.appendChild(btn);
